@@ -550,10 +550,11 @@ pub(crate) fn sync_common_config_from_live(
 ) -> Result<(), AppError> {
     let live_settings = read_live_settings(app_type.clone())?;
 
-    let snippet = crate::services::provider::ProviderService::extract_common_config_snippet_from_settings(
-        app_type.clone(),
-        &live_settings,
-    )?;
+    let snippet =
+        crate::services::provider::ProviderService::extract_common_config_snippet_from_settings(
+            app_type.clone(),
+            &live_settings,
+        )?;
 
     if !snippet.is_empty() && snippet != "{}" {
         db.set_config_snippet(app_type.as_str(), Some(snippet))?;
