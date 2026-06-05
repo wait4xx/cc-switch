@@ -561,6 +561,16 @@ pub(crate) fn sync_common_config_from_live(
             "✓ Synced common config snippet for {} from live settings",
             app_type.as_str()
         );
+    } else {
+        // Live settings had no extractable common fields — clear the stale
+        // snippet so that provider_uses_common_config won't write back
+        // removed fields on the next switch.
+        db.set_config_snippet(app_type.as_str(), None)?;
+        let _ = db.set_config_snippet_cleared(app_type.as_str(), true);
+        log::info!(
+            "✓ Cleared stale common config snippet for {} (live has no common fields)",
+            app_type.as_str()
+        );
     }
 
     Ok(())
